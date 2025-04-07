@@ -3,7 +3,7 @@ import { ShoppingCartIcon, ShoppingBagIcon } from "lucide-react";
 
 import ThemeSelector from "./ThemeSelector";
 
-function Navbar() {
+export default function Navbar() {
     const { pathname } = useResolvedPath();
     const isHomePage = pathname === "/";
     return (
@@ -24,9 +24,9 @@ function Navbar() {
                         </Link>
                     </div>
                     <div className="flex items-center gap-4">
-                        <p>
+                        <div>
                             <ThemeSelector />
-                        </p>
+                        </div>
                         {
                             isHomePage && (
                                 <div className="indicator">
@@ -45,5 +45,3 @@ function Navbar() {
         </div>
     );
 }
-
-export default Navbar;
