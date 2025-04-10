@@ -15,7 +15,7 @@ export default function AddProductModal() {
                 <h3 className="font-bold text-xl mb-8">
                     Add New Product
                 </h3>
-                <form onSubmit={addProduct} className="space-y-6">
+                <div className="space-y-6">
                     <div className="grid gap-6">
                         <div className="form-control">
                             <label className="label">
@@ -79,6 +79,7 @@ export default function AddProductModal() {
                             type="submit"
                             className="btn btn-primary min-w-[120px]"
                             disabled={!formData.name || !formData.price || !formData.image || loading}
+                            onClick={addProduct}
                         >
                             {loading ? (
                                 <span className="loading loading-spinner loading-sm" />
@@ -90,7 +91,7 @@ export default function AddProductModal() {
                             )}
                         </button>
                     </div>
-                </form>
+                </div>
             </div>
             <form method="dialog" className="modal-backdrop">
                 <button>close</button>
