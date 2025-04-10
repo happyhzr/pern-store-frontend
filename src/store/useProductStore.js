@@ -8,6 +8,13 @@ export const useProductStore = create((set, get) => ({
     products: [],
     loading: false,
     error: null,
+    formData: {
+        name: '',
+        price: 0,
+        image: '',
+    },
+    setForm: (formData) => set({ formData }),
+    resetForm: () => set({ formData: { name: '', price: 0, image: '' } }),
     fetchProducts: async () => {
         set({ loading: true })
         try {
@@ -36,6 +43,28 @@ export const useProductStore = create((set, get) => ({
                 set({ error: "Too many requests. Please try again later." })
             } else {
                 set({ error: "An error occurred while deleting the product." })
+            }
+        } finally {
+            set({ loading: false })
+        }
+    },
+    addProduct: async (e) => {
+        e.preventDefault()
+        set({ loading: true })
+        try {
+            const { formData, fetchProducts, resetForm } = get()
+            await axios.post(`${BASE_URL}/api/v1/products`, formData)
+            await fetchProducts()
+            resetForm()
+            toast.success("Product added successfully")
+            document.getElementById("add_product_modal").close()
+        } catch (err) {
+            console.log("Error adding product:", err)
+            toast.error("Error adding product")
+            if (err.status === 429) {
+                set({ error: "Too many requests. Please try again later." })
+            } else {
+                set({ error: "An error occurred while adding the product." })
             }
         } finally {
             set({ loading: false })

@@ -22,7 +22,7 @@ export default function ProductCard({ product }) {
                     <EditIcon className="size-4" />
                 </Link>
                 <button className="btn btn-sm btn-error btn-outline">
-                    <Trash2Icon className="size-4" onClick={() => deleteProduct(product.id)}></Trash2Icon>
+                    <Trash2Icon className="size-4" onClick={() => { }/*</button>deleteProduct(product.id)*/}></Trash2Icon>
                 </button>
             </div>
         </div>
