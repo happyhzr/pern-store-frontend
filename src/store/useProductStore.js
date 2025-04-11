@@ -8,6 +8,7 @@ export const useProductStore = create((set, get) => ({
     products: [],
     loading: false,
     error: null,
+    currentProduct: null,
     formData: {
         name: '',
         price: 0,
@@ -49,7 +50,6 @@ export const useProductStore = create((set, get) => ({
         }
     },
     addProduct: async (e) => {
-        e.preventDefault()
         set({ loading: true })
         try {
             const { formData, fetchProducts, resetForm } = get()
@@ -65,6 +65,41 @@ export const useProductStore = create((set, get) => ({
                 set({ error: "Too many requests. Please try again later." })
             } else {
                 set({ error: "An error occurred while adding the product." })
+            }
+        } finally {
+            set({ loading: false })
+        }
+    },
+    fetchProduct: async (id) => {
+        set({ loading: true })
+        try {
+            const response = await axios.get(`${BASE_URL}/api/v1/products/${id}`)
+            set({ currentProduct: response.data.data, formData: response.data.data, error: null })
+        } catch (err) {
+            toast.error("Error fetching product")
+            if (err.status === 429) {
+                set({ error: "Too many requests. Please try again later." })
+            } else {
+                set({ error: "An error occurred while fetching the product." })
+            }
+        } finally {
+            set({ loading: false })
+        }
+    },
+    updateProduct: async (id) => {
+        set({ loading: true })
+        try {
+            const { formData } = get()
+            const response = await axios.put(`${BASE_URL}/api/v1/products/${id}`, formData)
+            set({ currentProduct: response.data.data, error: null })
+            toast.success("Product updated successfully")
+        } catch (err) {
+            console.log("Error updating product:", err)
+            toast.error("Error updating product")
+            if (err.status === 429) {
+                set({ error: "Too many requests. Please try again later." })
+            } else {
+                set({ error: "An error occurred while updating the product." })
             }
         } finally {
             set({ loading: false })
