@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, Trash2Icon, SaveIcon } from "lucide-react";
 
 import { useProductStore } from "../store/useProductStore";
 
@@ -12,6 +12,12 @@ export default function ProductPage() {
     useEffect(() => {
         fetchProduct(id)
     }, [])
+    const handleDelete = async () => {
+        if (window.confirm("Are you sure you want to delete this product?")) {
+            await deleteProduct(id)
+            navigate('/')
+        }
+    }
     if (loading) {
         return (
             <div className="flex justify-center items-center min-h-screen">
@@ -40,14 +46,14 @@ export default function ProductPage() {
                         currentProduct && (<img src={currentProduct.image} alt={currentProduct.name} className="size-full object-cover" />)
                     }
                 </div>
-                {/* <div className="card bg-base-100 shadow-lg">
+                <div className="card bg-base-100 shadow-lg">
                     <div className="card-body">
                         <h2 className="card-title text-2xl mb-6">
                             Edit Product
                         </h2>
                         <form onSubmit={e => {
                             e.preventDefault()
-                            updateProduct(id)
+                            //updateProduct(id)
                         }} className="space-y-6">
                             <div className="form-control">
                                 <label className="label">
@@ -61,9 +67,58 @@ export default function ProductPage() {
                                     onChange={(e) => setForm({ ...formData, name: e.target.value })}
                                 />
                             </div>
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text text-base font-medium">Price</span>
+                                </label>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    step="0.01"
+                                    placeholder="0.00"
+                                    className="input input-bordered w-full"
+                                    value={formData.price}
+                                    onChange={(e) => setForm({ ...formData, price: e.target.value })}
+                                />
+                            </div>
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text text-base font-medium">Image URL</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder="https://example.com/image.jpg"
+                                    className="input input-bordered w-full"
+                                    value={formData.image}
+                                    onChange={(e) => setForm({ ...formData, image: e.target.value })}
+                                />
+                            </div>
+                            <div className="flex justify-between mt-8">
+                                <button type="button" onClick={() => {
+                                    //handleDelete()
+                                }} className="btn btn-error">
+                                    <Trash2Icon className="size-4 mr-2" />
+                                    Delete Product
+                                </button>
+
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary"
+                                    disabled={loading || !formData.name || !formData.price || !formData.image}
+                                >
+                                    {loading ? (
+                                        <span className="loading loading-spinner loading-sm" />
+                                    ) : (
+                                        <>
+                                            <SaveIcon className="size-4 mr-2" />
+                                            Save Changes
+                                        </>
+                                    )}
+                                </button>
+                            </div>
                         </form>
                     </div>
-                </div> */}
+                </div>
             </div>
         </div>
     );
